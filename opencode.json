@@ -1,0 +1,62 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "constellation": {
+      "type": "local",
+      "command": ["mcp-constellation"],
+      "enabled": true,
+      "environment": {
+         "CONSTELLATION_ACCESS_KEY": "{env:CONSTELLATION_ACCESS_KEY}",
+      },
+    }
+  },
+  "agent": {
+    "source-scout": {
+      "description": "Codebase exploration using Constellation code intelligence. Use @source-scout for: 'What does this codebase do?', 'Where is the auth logic?', 'Find usages of X'",
+      "mode": "subagent",
+      "model": "inherit",
+      "color": "primary",
+      "temperature": 0.2,
+      "prompt": "./prompts/source-scout.md",
+      "tools": {
+        "constellation_code_intel": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "impact-investigator": {
+      "description": "Change impact assessment using Constellation code intelligence. Use @impact-investigator before: renaming, deleting, or modifying functions/classes",
+      "mode": "subagent",
+      "model": "inherit",
+      "color": "secondary",
+      "temperature": 0.1,
+      "prompt": "./prompts/impact-investigator.md",
+      "tools": {
+        "constellation_code_intel": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "write": false,
+        "edit": false
+      }
+    },
+    "dependency-detective": {
+      "description": "Dependency analysis using Constellation code intelligence. Use @dependency-detective for: circular imports, module coupling, dependency health",
+      "mode": "subagent",
+      "model": "inherit",
+      "color": "info",
+      "prompt": "./prompts/dependency-detective.md",
+      "tools": {
+        "constellation_code_intel": true,
+        "read": true,
+        "grep": true,
+        "glob": true,
+        "write": false,
+        "edit": false
+      }
+    }
+  }
+}

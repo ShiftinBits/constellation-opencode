@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.log
+
+# Local settings
+.claude/settings.local.json
+
+# Git worktrees
+.worktrees/

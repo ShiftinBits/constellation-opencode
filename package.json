@@ -1,0 +1,51 @@
+{
+  "name": "@constellationdev/opencode",
+  "version": "1.0.0",
+  "description": "Constellation Plugin for OpenCode",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/",
+    "commands/",
+    "prompts/",
+    "skills/",
+    "opencode.json"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "constellation",
+    "code-intelligence",
+    "code-analysis",
+    "dependency-analysis",
+    "impact-analysis"
+  ],
+  "author": {
+    "name": "ShiftinBits Inc"
+  },
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shiftinbits/constellation-opencode"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.0.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
