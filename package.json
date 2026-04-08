@@ -39,7 +39,7 @@
   "license": "AGPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shiftinbits/constellation-opencode"
+    "url": "https://github.com/ShiftinBits/constellation-opencode"
   },
   "devDependencies": {
     "@opencode-ai/plugin": "^1.0.0",
