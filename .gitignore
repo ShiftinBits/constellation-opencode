@@ -1,9 +1,18 @@
+# Claude Code local settings
+.claude/settings.local.json
+.claude/plans
+.claude/worktrees
+.superpowers/
+docs/superpowers
+docs/plans
+docs/specs
+
+# Temp Folders
+temp/
+
 node_modules/
 dist/
 *.log
-
-# Local settings
-.claude/settings.local.json
 
 # Git worktrees
 .worktrees/
