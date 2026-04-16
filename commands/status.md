@@ -1,6 +1,6 @@
 ---
 description: Check Constellation API connectivity and authentication status
-model: anthropic/claude-haiku-4-20250514
+model: anthropic/claude-haiku-4-5-20251001
 ---
 
 Check the Constellation API connection status by calling the `constellation_code_intel` tool with this code parameter:

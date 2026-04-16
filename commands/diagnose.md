@@ -1,6 +1,6 @@
 ---
 description: Quick health check for Constellation connectivity and authentication
-model: anthropic/claude-haiku-4-20250514
+model: anthropic/claude-haiku-4-5-20251001
 ---
 
 Run a quick Constellation health check by calling `constellation_code_intel` with this code:

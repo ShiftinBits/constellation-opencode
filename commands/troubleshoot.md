@@ -1,6 +1,6 @@
 ---
 description: Diagnose Constellation issues using error code reference
-model: anthropic/claude-haiku-4-20250514
+model: anthropic/claude-haiku-4-5-20251001
 ---
 
 The user is experiencing issues with Constellation. Use the error code reference below to diagnose and provide solutions.
