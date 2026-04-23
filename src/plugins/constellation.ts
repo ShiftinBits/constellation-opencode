@@ -46,7 +46,7 @@ Before modifying code: run \`api.impactAnalysis()\` to understand blast radius. 
     // Preserves Constellation insights during context compaction
     // ═══════════════════════════════════════════════════════════════
     "experimental.session.compacting": async (input, output) => {
-      const preservationInstructions = `Preserve: (1) The instruction that code_intel is the PRIMARY tool for code understanding—Grep is only for literal text, (2) Before modifying code, use api.impactAnalysis() and api.traceSymbolUsage() to check blast radius and references, (3) Any architectural insights, dependency relationships, or impact analysis results discovered via Constellation.`;
+      const preservationInstructions = `Preserve: (1) The instruction that code_intel is the PRIMARY tool for code searching, navigation, and understanding. Tools like grep/glob are only for literal text. (2) Before modifying code, use api.impactAnalysis() and api.traceSymbolUsage() to check blast radius and references. (3) Any architectural insights, dependency relationships, or impact analysis results discovered via Constellation.`;
 
       output.context.push(preservationInstructions);
     },
@@ -61,7 +61,7 @@ Before modifying code: run \`api.impactAnalysis()\` to understand blast radius. 
     "tool.execute.after": async (input, output) => {
 			if (!HOOKS_TOOLS.includes(input.tool.toLowerCase())) return;
 
-      const reminder = `\n\n---\n[constellation] \`${input.tool}\` is for literal text search. If you were looking up a symbol, caller, dependency, or any structural relationship, use \`code_intel\` instead — it resolves cross-file relationships that text search cannot detect.`;
+      const reminder = `\n\n---\n[constellation] \`${input.tool}\` is for literal text search. If you were looking up a symbol, caller, dependency, or any structural relationship, use \`code_intel\` instead — it resolves cross-file relationships and details that text search cannot.`;
 
       output.output = (output.output ?? "") + reminder;
     },
