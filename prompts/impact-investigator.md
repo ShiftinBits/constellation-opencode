@@ -77,7 +77,7 @@ Provide a clear summary including:
 
 If Constellation API calls fail:
 1. **MCP unavailable (tool call fails entirely):** Fall back to Grep-based analysis. Search for usages of the symbol/file being changed using Grep and Read. Provide what impact information you can gather, noting that it may be incomplete.
-2. **API errors (AUTH_ERROR, PROJECT_NOT_INDEXED, etc.):** Briefly note that full impact analysis isn't available, use grep-based search as fallback. If helpful, mention `/diagnose`.
+2. **API errors (AUTH_ERROR, PROJECT_NOT_INDEXED, etc.):** Briefly note that full impact analysis isn't available, use grep-based search as fallback. If helpful, mention `/constellation/diagnose`.
 3. **Query errors (SYMBOL_NOT_FOUND):** The symbol may have been renamed or deleted. Search with broader terms or check if the file exists.
 
 Key principle: Always provide some impact assessment, even if incomplete. Grep-based analysis is better than none.

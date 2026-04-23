@@ -27,7 +27,7 @@ src/
 ├── index.ts                   Re-exports from plugins/constellation.ts
 └── plugins/
     └── constellation.ts       Main plugin — 4 hooks: system transform, compaction, tool-result injection, config
-commands/                      7 slash commands
+commands/constellation/        7 slash commands (namespaced → /constellation/<name>)
 ├── status.md                  API connectivity check (model: haiku)
 ├── diagnose.md                Full health check (model: haiku)
 ├── impact.md                  Symbol change impact analysis
@@ -125,9 +125,11 @@ Authoritative source: the `Hooks` interface in `node_modules/@opencode-ai/plugin
 
 ### Adding a Command
 
-1. Create `commands/<name>.md` with YAML frontmatter (`description`, optional `model`)
+1. Create `commands/constellation/<name>.md` with YAML frontmatter (`description`, optional `model`) — the subdirectory becomes the namespace, so the file is invoked as `/constellation/<name>`
 2. Reference `constellation_code_intel` tool name
 3. Arguments via `$1`, `$2`, `$ARGUMENTS`
+
+Namespace rationale: OpenCode's `configEntryNameFromPath` (`packages/opencode/src/config/entry-name.ts`) slices command file paths after `commands/` and strips `.md`, producing the exact slash-command name. A subdirectory `commands/constellation/foo.md` therefore resolves to `/constellation/foo`. A literal colon (`/constellation:foo`) would require `:` in the filename, which NTFS rejects and would break Windows installs of the npm package.
 
 ### Adding an Agent
 
@@ -139,13 +141,13 @@ Authoritative source: the `Hooks` interface in `node_modules/@opencode-ai/plugin
 No automated tests. Validate manually in OpenCode:
 
 ```
-/status                             # API connectivity
-/diagnose                           # Full health check
-/impact <symbol> [file]             # Change impact
-/deps <file> [--reverse]            # Dependencies
-/unused [kind]                      # Dead code
-/architecture                       # Codebase overview
-/troubleshoot <error-code>          # Error diagnosis
+/constellation/status                   # API connectivity
+/constellation/diagnose                 # Full health check
+/constellation/impact <symbol> [file]   # Change impact
+/constellation/deps <file> [--reverse]  # Dependencies
+/constellation/unused [kind]            # Dead code
+/constellation/architecture             # Codebase overview
+/constellation/troubleshoot <error-code> # Error diagnosis
 
 @source-scout What does this codebase do?
 @impact-investigator I'm renaming UserService

@@ -18,13 +18,13 @@ Execute powerful analysis with simple slash commands:
 
 | Command | Description |
 |---------|-------------|
-| `/status` | Check API connectivity and project indexing status |
-| `/diagnose` | Full health check with project stats |
-| `/impact <symbol> [file]` | Analyze blast radius before changing a symbol |
-| `/deps <file> [--reverse]` | Map dependencies or find what depends on a file |
-| `/unused [kind]` | Discover orphaned exports and dead code |
-| `/architecture` | Get a high-level overview of your codebase structure |
-| `/troubleshoot [error]` | Diagnose Constellation issues with error code reference |
+| `/constellation/status` | Check API connectivity and project indexing status |
+| `/constellation/diagnose` | Full health check with project stats |
+| `/constellation/impact <symbol> [file]` | Analyze blast radius before changing a symbol |
+| `/constellation/deps <file> [--reverse]` | Map dependencies or find what depends on a file |
+| `/constellation/unused [kind]` | Discover orphaned exports and dead code |
+| `/constellation/architecture` | Get a high-level overview of your codebase structure |
+| `/constellation/troubleshoot [error]` | Diagnose Constellation issues with error code reference |
 
 ### Agents
 
@@ -87,7 +87,7 @@ OpenCode will automatically install the plugin at startup.
 ### Check Your Setup
 
 ```
-> /status
+> /constellation/status
 
 Status: Connected
 Project: my-awesome-app
@@ -99,7 +99,7 @@ Languages: TypeScript, JavaScript
 ### Analyze Before Refactoring
 
 ```
-> /impact validateUser src/auth/validator.ts
+> /constellation/impact validateUser src/auth/validator.ts
 
 Symbol: validateUser (function)
 Risk Level: MEDIUM
@@ -115,7 +115,7 @@ Recommendations:
 ### Find Dead Code
 
 ```
-> /unused function
+> /constellation/unused function
 
 Found 7 orphaned functions:
 ├── src/utils/legacy.ts
@@ -129,7 +129,7 @@ Found 7 orphaned functions:
 ### Understand Dependencies
 
 ```
-> /deps src/services/payment.service.ts
+> /constellation/deps src/services/payment.service.ts
 
 Dependencies (12):
 ├── Internal (8)
@@ -161,7 +161,7 @@ Your Code → AST Extraction → Constellation API → Code Intelligence
 |-------|----------|
 | `AUTH_ERROR` | Check `CONSTELLATION_ACCESS_KEY` is set correctly, use `constellation auth` CLI command to set |
 | `PROJECT_NOT_INDEXED` | Run `constellation index --full` in your project |
-| MCP Server not responding | Restart OpenCode or run `/diagnose` to check connectivity |
+| MCP Server not responding | Restart OpenCode or run `/constellation/diagnose` to check connectivity |
 
 ## Documentation
 
