@@ -2,17 +2,20 @@ import type { Plugin } from "@opencode-ai/plugin";
 import type { Config } from "@opencode-ai/sdk";
 
 /**
+ * Tools which to monitor via hooks
+ */
+const HOOKS_TOOLS = ["grep", "glob"];
+
+/**
  * Constellation OpenCode Plugin
  *
  * Hooks:
  * - experimental.chat.system.transform — Inject code_intel primer + tool preference guidance
  * - experimental.session.compacting — Preserve Constellation insights during compaction
- * - tool.execute.before — Log structural query tool usage for debugging
+ * - tool.execute.after — Append a code_intel reminder to grep/glob tool results
  * - config — Programmatic MCP server registration
  */
-
 export const ConstellationPlugin: Plugin = async () => {
-  console.log("Constellation plugin initialized!");
   return {
     // ═══════════════════════════════════════════════════════════════
     // Hook: experimental.chat.system.transform
@@ -49,17 +52,18 @@ Before modifying code: run \`api.impactAnalysis()\` to understand blast radius. 
     },
 
     // ═══════════════════════════════════════════════════════════════
-    // Hook: tool.execute.before
-    // Logs when grep/glob is used for structural queries as a
-    // debugging aid. The primary behavioral guidance lives in
-    // the system transform above.
+    // Hook: tool.execute.after
+    // When grep/glob is used, append an LLM-visible reminder to the
+    // tool result so the model re-considers code_intel for structural
+    // follow-ups. Appends to output.output (the tool result string
+    // the LLM consumes); does NOT write to the user terminal.
     // ═══════════════════════════════════════════════════════════════
-    "tool.execute.before": async (input, output) => {
-      if (input.tool === "grep" || input.tool === "glob") {
-        console.log(
-          `[constellation] ${input.tool} called — code_intel is preferred for structural queries`,
-        );
-      }
+    "tool.execute.after": async (input, output) => {
+			if (!HOOKS_TOOLS.includes(input.tool.toLowerCase())) return;
+
+      const reminder = `\n\n---\n[constellation] \`${input.tool}\` is for literal text search. If you were looking up a symbol, caller, dependency, or any structural relationship, use \`code_intel\` instead — it resolves cross-file relationships that text search cannot detect.`;
+
+      output.output = (output.output ?? "") + reminder;
     },
 
     // ═══════════════════════════════════════════════════════════════
