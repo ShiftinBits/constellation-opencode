@@ -120,7 +120,7 @@ These are typically **not errors** - the item simply wasn't found in the index.
 
 ## Diagnostic Command
 
-Run `/constellation/diagnose` for a quick health check that tests:
+Run `/constellation-diagnose` for a quick health check that tests:
 - MCP server connectivity
 - API authentication
 - Project indexing status

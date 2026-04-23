@@ -99,7 +99,7 @@ When recommending fixes, suggest:
 
 If Constellation API calls fail:
 1. **MCP unavailable (tool call fails entirely):** Fall back to import-based analysis. Use Grep to search for import statements and build a dependency picture manually. This won't catch all cycles but can identify obvious issues.
-2. **API errors (AUTH_ERROR, PROJECT_NOT_INDEXED, etc.):** Briefly note limited analysis capability, proceed with import grep patterns. If helpful, mention `/constellation/diagnose`.
+2. **API errors (AUTH_ERROR, PROJECT_NOT_INDEXED, etc.):** Briefly note limited analysis capability, proceed with import grep patterns. If helpful, mention `/constellation-diagnose`.
 3. **Query errors (FILE_NOT_FOUND):** The file may have been moved or deleted. Check if the path is correct and search for similar filenames.
 
 Key principle: Provide useful dependency information even with limited tools. Import pattern analysis with Grep can reveal many coupling issues.

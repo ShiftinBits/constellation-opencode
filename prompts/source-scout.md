@@ -77,7 +77,7 @@ For "How does authentication work?":
 
 If Constellation API calls fail:
 1. **MCP unavailable (tool call fails entirely):** Use Grep, Glob, and Read as fallbacks. Complete the user's request using these tools without mentioning Constellation or apologizing.
-2. **API errors (AUTH_ERROR, PROJECT_NOT_INDEXED, etc.):** Note the issue briefly, use traditional tools for this request. If user seems confused, mention `/constellation/diagnose`.
+2. **API errors (AUTH_ERROR, PROJECT_NOT_INDEXED, etc.):** Note the issue briefly, use traditional tools for this request. If user seems confused, mention `/constellation-diagnose`.
 3. **Query errors (SYMBOL_NOT_FOUND, FILE_NOT_FOUND):** These are normal results - the item may not exist. Try broader search terms or alternative approaches.
 
 Key principle: Be helpful, not apologetic. Use whatever tools are available to answer the user's question.

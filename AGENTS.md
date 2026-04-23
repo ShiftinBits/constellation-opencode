@@ -27,14 +27,14 @@ src/
 ├── index.ts                   Re-exports from plugins/constellation.ts
 └── plugins/
     └── constellation.ts       Main plugin — 4 hooks: system transform, compaction, tool-result injection, config
-commands/constellation/        7 slash commands (namespaced → /constellation/<name>)
-├── status.md                  API connectivity check (model: haiku)
-├── diagnose.md                Full health check (model: haiku)
-├── impact.md                  Symbol change impact analysis
-├── deps.md                    File dependency analysis
-├── unused.md                  Dead code finder
-├── architecture.md            Codebase architecture overview
-└── troubleshoot.md            Error diagnosis (model: haiku)
+commands/                      7 slash commands (prefixed → /constellation-<name>)
+├── constellation-status.md        API connectivity check (model: haiku)
+├── constellation-diagnose.md      Full health check (model: haiku)
+├── constellation-impact.md        Symbol change impact analysis
+├── constellation-deps.md          File dependency analysis
+├── constellation-unused.md        Dead code finder
+├── constellation-architecture.md  Codebase architecture overview
+└── constellation-troubleshoot.md  Error diagnosis (model: haiku)
 prompts/                       3 agent system prompts (no YAML frontmatter)
 ├── source-scout.md            Codebase exploration
 ├── impact-investigator.md     Change risk assessment
@@ -125,11 +125,11 @@ Authoritative source: the `Hooks` interface in `node_modules/@opencode-ai/plugin
 
 ### Adding a Command
 
-1. Create `commands/constellation/<name>.md` with YAML frontmatter (`description`, optional `model`) — the subdirectory becomes the namespace, so the file is invoked as `/constellation/<name>`
+1. Create `commands/constellation-<name>.md` with YAML frontmatter (`description`, optional `model`) — the `constellation-` prefix becomes part of the slash command, so the file is invoked as `/constellation-<name>`
 2. Reference `constellation_code_intel` tool name
 3. Arguments via `$1`, `$2`, `$ARGUMENTS`
 
-Namespace rationale: OpenCode's `configEntryNameFromPath` (`packages/opencode/src/config/entry-name.ts`) slices command file paths after `commands/` and strips `.md`, producing the exact slash-command name. A subdirectory `commands/constellation/foo.md` therefore resolves to `/constellation/foo`. A literal colon (`/constellation:foo`) would require `:` in the filename, which NTFS rejects and would break Windows installs of the npm package.
+Naming rationale: OpenCode's `configEntryNameFromPath` (`packages/opencode/src/config/entry-name.ts`) slices command file paths after `commands/` and strips `.md`, producing the exact slash-command name verbatim. A flat filename like `commands/constellation-foo.md` therefore resolves to `/constellation-foo`, keeping the layout portable across filesystems (no `:` which NTFS rejects; no subdirectories to navigate).
 
 ### Adding an Agent
 
@@ -141,13 +141,13 @@ Namespace rationale: OpenCode's `configEntryNameFromPath` (`packages/opencode/sr
 No automated tests. Validate manually in OpenCode:
 
 ```
-/constellation/status                   # API connectivity
-/constellation/diagnose                 # Full health check
-/constellation/impact <symbol> [file]   # Change impact
-/constellation/deps <file> [--reverse]  # Dependencies
-/constellation/unused [kind]            # Dead code
-/constellation/architecture             # Codebase overview
-/constellation/troubleshoot <error-code> # Error diagnosis
+/constellation-status                    # API connectivity
+/constellation-diagnose                  # Full health check
+/constellation-impact <symbol> [file]    # Change impact
+/constellation-deps <file> [--reverse]   # Dependencies
+/constellation-unused [kind]             # Dead code
+/constellation-architecture              # Codebase overview
+/constellation-troubleshoot <error-code> # Error diagnosis
 
 @source-scout What does this codebase do?
 @impact-investigator I'm renaming UserService
