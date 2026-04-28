@@ -51,34 +51,36 @@ Before modifying code: run \`api.impactAnalysis()\` to understand blast radius. 
       output.context.push(preservationInstructions);
     },
 
-    // ═══════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════
     // Hook: tool.execute.after
     // When grep/glob is used, append an LLM-visible reminder to the
     // tool result so the model re-considers code_intel for structural
     // follow-ups. Appends to output.output (the tool result string
     // the LLM consumes); does NOT write to the user terminal.
-    // ═══════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════
     "tool.execute.after": async (input, output) => {
-			if (!HOOKS_TOOLS.includes(input.tool.toLowerCase())) return;
+      if (!HOOKS_TOOLS.includes(input.tool.toLowerCase())) return;
 
       const reminder = `\n\n---\n[constellation] \`${input.tool}\` is for literal text search. If you were looking up a symbol, caller, dependency, or any structural relationship, use \`code_intel\` instead — it resolves cross-file relationships and details that text search cannot.`;
 
       output.output = (output.output ?? "") + reminder;
     },
 
-    // ═══════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════
     // Hook: config
     // Programmatically register Constellation MCP server.
-    // ═══════════════════════════════════════════════════════════════
+    // Uses the {env:...} deferred lookup syntax so OpenCode
+    // resolves the env var at spawn time (not plugin load time).
+    // ══════════════════════════════════════════════════════════════
     config: async (input: Config) => {
       input.mcp = input.mcp ?? {};
       input.mcp["constellation"] = {
         type: "local",
         command: ["npx", "-y", "@constellationdev/mcp@latest"],
         environment: {
-          CONSTELLATION_ACCESS_KEY: "{env:CONSTELLATION_ACCESS_KEY}",
+          CONSTELLATION_ACCESS_KEY: process.env.CONSTELLATION_ACCESS_KEY ?? "",
         },
-        enabled: true
+        enabled: true,
       };
     },
   };
