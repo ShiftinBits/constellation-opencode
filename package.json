@@ -14,8 +14,7 @@
   },
   "files": [
     "dist/",
-    "commands/",
-    "prompts/",
+    "agents/",
     "skills/",
     "opencode.json"
   ],

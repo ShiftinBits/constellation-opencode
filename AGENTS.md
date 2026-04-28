@@ -3,7 +3,7 @@
 **Role**: OpenCode plugin for Constellation code intelligence platform.
 **See**: `../AGENTS.md` for workspace architecture.
 
-**Skill**: When working on this project, ALWAYS use the `opencode-plugin` skill (`opencode-plugin-development`). It provides comprehensive OpenCode plugin API documentation, patterns, and examples. Invoke it before making any changes to commands, agents, hooks, or `opencode.json`.
+**Skill**: When working on this project, ALWAYS use the `opencode-plugin` skill (`opencode-plugin-development`). It provides comprehensive OpenCode plugin API documentation, patterns, and examples. Invoke it before making any changes to skills, agents, hooks, or `opencode.json`.
 
 ## Quick Reference
 
@@ -11,8 +11,8 @@
 |------|----------|
 | Build | `npm run build` (tsc) |
 | Type check | `npm run type-check` |
-| Add command | `commands/<name>.md` |
-| Add agent | `opencode.json` `"agent"` + `prompts/<name>.md` |
+| Add skill | `skills/<name>/SKILL.md` |
+| Add agent | `opencode.json` `"agent"` + `agents/<name>.md` |
 | Modify hooks | `src/plugins/constellation.ts` |
 | MCP config | `opencode.json` `"mcp"` section (declarative) OR `config` hook (programmatic) |
 | Error codes | `skills/constellation-troubleshooting/references/error-codes.md` |
@@ -27,21 +27,20 @@ src/
 ├── index.ts                   Re-exports from plugins/constellation.ts
 └── plugins/
     └── constellation.ts       Main plugin — 4 hooks: system transform, compaction, tool-result injection, config
-commands/                      7 slash commands (prefixed → /constellation-<name>)
-├── constellation-status.md        API connectivity check (model: haiku)
-├── constellation-diagnose.md      Full health check (model: haiku)
-├── constellation-impact.md        Symbol change impact analysis
-├── constellation-deps.md          File dependency analysis
-├── constellation-unused.md        Dead code finder
-├── constellation-architecture.md  Codebase architecture overview
-└── constellation-troubleshoot.md  Error diagnosis (model: haiku)
-prompts/                       3 agent system prompts (no YAML frontmatter)
+agents/                        3 agent system prompts (no YAML frontmatter)
 ├── source-scout.md            Codebase exploration
 ├── impact-investigator.md     Change risk assessment
 └── dependency-detective.md    Dependency health
-skills/constellation-troubleshooting/
-├── SKILL.md                   Troubleshooting guide (diagnostic flowchart + fixes)
-└── references/error-codes.md  Complete error code reference
+skills/                        7 on-demand skills loaded via the `skill` tool
+├── constellation-status/SKILL.md          API connectivity check
+├── constellation-diagnose/SKILL.md        Full health check
+├── constellation-impact/SKILL.md          Symbol change impact analysis
+├── constellation-deps/SKILL.md            File dependency analysis
+├── constellation-unused/SKILL.md          Dead code finder
+├── constellation-architecture/SKILL.md    Codebase architecture overview
+└── constellation-troubleshooting/         Error diagnosis + reference
+    ├── SKILL.md                           Troubleshooting guide + error code tables
+    └── references/error-codes.md          Complete error code reference
 ```
 
 ## Hooks
@@ -123,31 +122,32 @@ Authoritative source: the `Hooks` interface in `node_modules/@opencode-ai/plugin
 
 ## Development
 
-### Adding a Command
+### Adding a Skill
 
-1. Create `commands/constellation-<name>.md` with YAML frontmatter (`description`, optional `model`) — the `constellation-` prefix becomes part of the slash command, so the file is invoked as `/constellation-<name>`
-2. Reference `constellation_code_intel` tool name
-3. Arguments via `$1`, `$2`, `$ARGUMENTS`
+1. Create `skills/<name>/SKILL.md` with YAML frontmatter — required fields: `name` (must match the directory, lowercase alphanumeric + hyphens, regex `^[a-z0-9]+(-[a-z0-9]+)*$`), `description` (1–1024 chars; phrase it so the agent's `skill` tool can match it to a user request — this is the *only* trigger).
+2. Body is plain markdown. Include the exact `constellation_code_intel` `code` payload the agent should run, plus a "Present" / "On error" section describing how to format the output.
+3. No `$1` / `$ARGUMENTS` syntax — skills receive no arguments. If the procedure needs inputs, list them under an "Inputs" section and instruct the agent to ask the user when missing.
+4. Optional supplementary docs go in `skills/<name>/references/` and are loaded explicitly by the skill body.
 
-Naming rationale: OpenCode's `configEntryNameFromPath` (`packages/opencode/src/config/entry-name.ts`) slices command file paths after `commands/` and strips `.md`, producing the exact slash-command name verbatim. A flat filename like `commands/constellation-foo.md` therefore resolves to `/constellation-foo`, keeping the layout portable across filesystems (no `:` which NTFS rejects; no subdirectories to navigate).
+OpenCode loads skills from `skills/`, `.opencode/skills/`, `~/.config/opencode/skills/`, `.claude/skills/`, and `.agents/skills/`. The `skills/` layout in this plugin ships via the `files` array in `package.json`.
 
 ### Adding an Agent
 
 1. Add config to `opencode.json` `"agent"` key — requires: `description`, `mode: "subagent"`, `tools` (object), `prompt` (file path)
-2. Create `prompts/<name>.md` — pure markdown, no YAML frontmatter
+2. Create `agents/<name>.md` — pure markdown, no YAML frontmatter
 
 ### Testing
 
-No automated tests. Validate manually in OpenCode:
+No automated tests. Validate manually in OpenCode by phrasing requests that match each skill's `description`:
 
 ```
-/constellation-status                    # API connectivity
-/constellation-diagnose                  # Full health check
-/constellation-impact <symbol> [file]    # Change impact
-/constellation-deps <file> [--reverse]   # Dependencies
-/constellation-unused [kind]             # Dead code
-/constellation-architecture              # Codebase overview
-/constellation-troubleshoot <error-code> # Error diagnosis
+"Check Constellation status"               → constellation-status
+"Run a full Constellation health check"    → constellation-diagnose
+"What's the impact of renaming X?"         → constellation-impact
+"Show dependencies for src/foo.ts"         → constellation-deps
+"Find dead code / unused exports"          → constellation-unused
+"Give me a codebase architecture overview" → constellation-architecture
+"Constellation says AUTH_ERROR, fix it"    → constellation-troubleshooting
 
 @source-scout What does this codebase do?
 @impact-investigator I'm renaming UserService

@@ -1,7 +1,9 @@
 ---
-description: Quick health check for Constellation connectivity and authentication
-model: anthropic/claude-haiku-4-5-20251001
+name: constellation-diagnose
+description: Use when the user asks for a Constellation health check, full diagnostic, or wants to verify MCP server connectivity, API authentication, and project indexing status all at once. Produces a brief actionable status report.
 ---
+
+# Constellation Diagnostic Health Check
 
 Run a quick Constellation health check by calling `constellation_code_intel` with this code:
 
@@ -16,9 +18,9 @@ return {
 };
 ```
 
-**Interpret the response and report:**
+## Interpret the Response
 
-### If the tool call FAILS ENTIRELY (timeout, connection error, MCP not found):
+### If the tool call FAILS ENTIRELY (timeout, connection error, MCP not found)
 
 ```
 Constellation Health Check
@@ -34,7 +36,7 @@ Quick Fixes:
 3. Check opencode.json configuration
 ```
 
-### If `result.success` is true:
+### If `result.success` is true
 
 ```
 Constellation Health Check
@@ -47,9 +49,10 @@ Index:       <files> files, <symbols> symbols
 All systems operational.
 ```
 
-### If `result.success` is false, check `result.error.code`:
+### If `result.success` is false, branch on `result.error.code`
 
-**AUTH_ERROR:**
+**AUTH_ERROR**
+
 ```
 Constellation Health Check
 ===========================
@@ -61,7 +64,8 @@ Issue: Authentication failed - API key missing or invalid.
 Quick Fix: Run `constellation auth` to configure credentials.
 ```
 
-**PROJECT_NOT_INDEXED:**
+**PROJECT_NOT_INDEXED**
+
 ```
 Constellation Health Check
 ===========================
@@ -74,7 +78,8 @@ Issue: This project hasn't been indexed yet.
 Quick Fix: Run `constellation index --full` in your project directory.
 ```
 
-**API_UNREACHABLE:**
+**API_UNREACHABLE**
+
 ```
 Constellation Health Check
 ===========================
@@ -89,7 +94,8 @@ Quick Fixes:
 3. For self-hosted: ensure API is running at configured URL
 ```
 
-**Other errors:**
+**Other errors**
+
 ```
 Constellation Health Check
 ===========================
@@ -102,4 +108,4 @@ Message: <error.message>
 Guidance: <error.guidance if available>
 ```
 
-Keep the response brief and actionable.
+Keep the response brief and actionable. For deeper error code reference, see the `constellation-troubleshooting` skill.

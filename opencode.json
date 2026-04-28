@@ -1,15 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "mcp": {
-    "constellation": {
-      "type": "local",
-      "command": ["mcp-constellation"],
-      "enabled": true,
-      "environment": {
-         "CONSTELLATION_ACCESS_KEY": "{env:CONSTELLATION_ACCESS_KEY}",
-      },
-    }
-  },
   "agent": {
     "source-scout": {
       "description": "Codebase exploration using Constellation code intelligence. Use @source-scout for: 'What does this codebase do?', 'Where is the auth logic?', 'Find usages of X'",
@@ -17,7 +7,7 @@
       "model": "inherit",
       "color": "primary",
       "temperature": 0.2,
-      "prompt": "./prompts/source-scout.md",
+      "prompt": "{file:./agents/source-scout.md}",
       "tools": {
         "constellation_code_intel": true,
         "read": true,
@@ -33,7 +23,7 @@
       "model": "inherit",
       "color": "secondary",
       "temperature": 0.1,
-      "prompt": "./prompts/impact-investigator.md",
+      "prompt": "{file:./agents/impact-investigator.md}",
       "tools": {
         "constellation_code_intel": true,
         "read": true,
@@ -48,7 +38,7 @@
       "mode": "subagent",
       "model": "inherit",
       "color": "info",
-      "prompt": "./prompts/dependency-detective.md",
+      "prompt": "{file:./agents/dependency-detective.md}",
       "tools": {
         "constellation_code_intel": true,
         "read": true,

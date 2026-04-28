@@ -6,25 +6,10 @@ While Constellation's MCP server provides raw code intelligence capabilities, th
 
 | Feature | Benefit |
 |---------|---------|
-| **Slash Commands** | Quick access to common workflows |
 | **Specialized Agents** | AI agents for codebase exploration, impact analysis, and dependency health |
 | **Session Hooks** | Automatic Constellation availability checks and context preservation |
 
 ## Features
-
-### Commands
-
-Execute powerful analysis with simple slash commands:
-
-| Command | Description |
-|---------|-------------|
-| `/constellation-status` | Check API connectivity and project indexing status |
-| `/constellation-diagnose` | Full health check with project stats |
-| `/constellation-impact <symbol> [file]` | Analyze blast radius before changing a symbol |
-| `/constellation-deps <file> [--reverse]` | Map dependencies or find what depends on a file |
-| `/constellation-unused [kind]` | Discover orphaned exports and dead code |
-| `/constellation-architecture` | Get a high-level overview of your codebase structure |
-| `/constellation-troubleshoot [error]` | Diagnose Constellation issues with error code reference |
 
 ### Agents
 
@@ -84,11 +69,14 @@ OpenCode will automatically install the plugin at startup.
 
 ## Usage Examples
 
+The plugin ships a set of on-demand **skills** — OpenCode's agent loads them automatically when a user request matches the skill's description. There are no slash commands; just ask.
+
 ### Check Your Setup
 
 ```
-> /constellation-status
+> Check Constellation status
 
+[skill: constellation-status]
 Status: Connected
 Project: my-awesome-app
 Files Indexed: 1,247
@@ -99,8 +87,9 @@ Languages: TypeScript, JavaScript
 ### Analyze Before Refactoring
 
 ```
-> /constellation-impact validateUser src/auth/validator.ts
+> What's the impact of changing validateUser in src/auth/validator.ts?
 
+[skill: constellation-impact]
 Symbol: validateUser (function)
 Risk Level: MEDIUM
 Files Affected: 12
@@ -115,8 +104,9 @@ Recommendations:
 ### Find Dead Code
 
 ```
-> /constellation-unused function
+> Find unused functions
 
+[skill: constellation-unused]
 Found 7 orphaned functions:
 ├── src/utils/legacy.ts
 │   ├── formatLegacyDate (line 23)
@@ -129,8 +119,9 @@ Found 7 orphaned functions:
 ### Understand Dependencies
 
 ```
-> /constellation-deps src/services/payment.service.ts
+> Show me the dependencies for src/services/payment.service.ts
 
+[skill: constellation-deps]
 Dependencies (12):
 ├── Internal (8)
 │   ├── src/models/payment.model.ts
@@ -143,6 +134,18 @@ Dependencies (12):
 
 No circular dependencies detected.
 ```
+
+### Available Skills
+
+| Skill | Triggers on |
+|-------|-------------|
+| `constellation-status` | "Is Constellation working?", "ping Constellation" |
+| `constellation-diagnose` | "Full Constellation health check" |
+| `constellation-impact` | "What would break if I change X?", "blast radius of X" |
+| `constellation-deps` | "Dependencies of X", "what depends on X" |
+| `constellation-unused` | "Find dead code", "orphaned exports" |
+| `constellation-architecture` | "Codebase overview", "architecture summary" |
+| `constellation-troubleshooting` | Any Constellation error code or "Constellation broken" |
 
 ### How It Works
 
@@ -161,7 +164,7 @@ Your Code → AST Extraction → Constellation API → Code Intelligence
 |-------|----------|
 | `AUTH_ERROR` | Check `CONSTELLATION_ACCESS_KEY` is set correctly, use `constellation auth` CLI command to set |
 | `PROJECT_NOT_INDEXED` | Run `constellation index --full` in your project |
-| MCP Server not responding | Restart OpenCode or run `/constellation-diagnose` to check connectivity |
+| MCP Server not responding | Restart OpenCode, or ask "Run a Constellation health check" to invoke the `constellation-diagnose` skill |
 
 ## Documentation
 
