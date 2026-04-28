@@ -74,12 +74,11 @@ Before modifying code: run \`api.impactAnalysis()\` to understand blast radius. 
       input.mcp = input.mcp ?? {};
       input.mcp["constellation"] = {
         type: "local",
-        command: ["mcp-constellation"],
+        command: ["npx", "-y", "@constellationdev/mcp@latest"],
         environment: {
           CONSTELLATION_ACCESS_KEY: "{env:CONSTELLATION_ACCESS_KEY}",
         },
-        enabled: true,
-        timeout: 30000,
+        enabled: true
       };
     },
   };
