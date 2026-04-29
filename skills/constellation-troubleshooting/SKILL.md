@@ -118,6 +118,8 @@ If the user mentions a specific error code, look it up directly. If they describ
 
 **Symptom:** "Authentication failed" or "Invalid API key"
 
+**Check if access key is properly set:** In the event of `AUTH_ERROR` failures the MCP server provides details in the `error.guidance[0]` value of the response object, indicating the current state of the `CONSTELLATION_ACCESS_KEY` environment variable.
+
 **Quick Fixes:**
 
 1. Configure credentials: `npx @constellationdev/cli auth`
