@@ -3,3 +3,7 @@ tsconfig.json
 CLAUDE.md
 .gitignore
 *.log
+.opencode/
+.claude/
+.github/
+AGENTS.md
